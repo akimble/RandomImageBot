@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import sx.blah.discord.api.IDiscordClient;
 
-public class Example {
+public class MainClass {
 	
 	public static void main(String[] args) throws IOException{
 		
