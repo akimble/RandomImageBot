@@ -6,12 +6,12 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 public class MyEvents {
 	
 	@EventSubscriber
-	public void onMessageReceived(MessageReceivedEvent event){
-		if(event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "test"))
+	public void onMessageReceived(MessageReceivedEvent event) {
+		if (event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "test"))
 			BotUtils.sendMessage(event.getChannel(), "I am sending a message from an EventSubscriber listener");
-		if(event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "image"))
+		if (event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "image"))
 			BotUtils.sendImage(event.getChannel());
-		if(event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "random"))
+		if (event.getMessage().getContent().startsWith(BotUtils.BOT_PREFIX + "random"))
 			BotUtils.sendRandomImage(event.getChannel());
 	}
 }

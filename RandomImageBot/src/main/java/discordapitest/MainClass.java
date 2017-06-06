@@ -8,9 +8,9 @@ import sx.blah.discord.api.IDiscordClient;
 
 public class MainClass {
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException {
 		
-		if(args.length != 1){
+		if (args.length != 1) {
 			System.out.println("Please enter the bots token as the first argument e.g java -jar thisjar.jar tokenhere");
 			return;
 		}

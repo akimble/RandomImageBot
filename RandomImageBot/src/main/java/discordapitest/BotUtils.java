@@ -16,7 +16,7 @@ class BotUtils {
 	static String BOT_PREFIX = "/";
 	
 	// Handles the creation and getting of a IDiscordClient object for a token
-	static IDiscordClient getBuiltDiscordClient(String token){
+	static IDiscordClient getBuiltDiscordClient(String token) {
 		
 		// The ClientBuilder object is where you will attach your params for configuring the instance of your bot.
 		// Such as withToken, setDaemon etc
@@ -25,12 +25,11 @@ class BotUtils {
 	}
 	
 	// Send a message to channel
-	static void sendMessage(IChannel channel, String message){
-		
+	static void sendMessage(IChannel channel, String message) {
 		RequestBuffer.request(() -> {
-			try{
+			try {
 				channel.sendMessage(message);
-			} catch(DiscordException e){
+			} catch (DiscordException e) {
 				System.err.println("Message could not be sent with error: ");
 				e.printStackTrace();
 			}
@@ -39,15 +38,15 @@ class BotUtils {
 	}
 	
 	// Send an image from a folder to channel
-	static void sendImage(IChannel channel){
+	static void sendImage(IChannel channel) {
 		File pathToFile;
 		
 		pathToFile = new File("C:/Users/Andrew/Pictures/Fbt3pvR.png"); //Change image path HERE
 		
 		RequestBuffer.request(() -> {
-			try{
+			try {
 				channel.sendFile(pathToFile);
-			} catch(FileNotFoundException e){
+			} catch (FileNotFoundException e) {
 				System.err.println("File not found");
 				e.printStackTrace();
 			}
@@ -55,7 +54,7 @@ class BotUtils {
 	}
 	
 	// Send a random image from a folder to channel
-	static void sendRandomImage(IChannel channel){
+	static void sendRandomImage(IChannel channel) {
 		File directoryPath;
 		File randomImage;
 		File[] paths;
@@ -66,9 +65,9 @@ class BotUtils {
 		randomImage = paths[rand.nextInt(paths.length)];
 		
 		RequestBuffer.request(() -> {
-			try{
+			try {
 				channel.sendFile(randomImage);
-			} catch(FileNotFoundException e){
+			} catch (FileNotFoundException e) {
 				System.err.println("File not found");
 				e.printStackTrace();
 			}
