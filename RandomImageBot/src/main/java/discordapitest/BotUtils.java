@@ -24,7 +24,7 @@ class BotUtils {
 		
 	}
 	
-	// Helper functions to make certain aspects of the bot easier to use.
+	// Send a message to channel
 	static void sendMessage(IChannel channel, String message){
 		
 		RequestBuffer.request(() -> {
@@ -38,21 +38,23 @@ class BotUtils {
 		
 	}
 	
-	// Send an image from my Pictures folder
+	// Send an image from a folder to channel
 	static void sendImage(IChannel channel){
 		File pathToFile;
 		
 		pathToFile = new File("C:/Users/Andrew/Pictures/Fbt3pvR.png"); //Change image path HERE
 		
-		try{
-			channel.sendFile(pathToFile);
-		} catch(FileNotFoundException e){
-			System.err.println("File not found");
-			e.printStackTrace();
-		}
+		RequestBuffer.request(() -> {
+			try{
+				channel.sendFile(pathToFile);
+			} catch(FileNotFoundException e){
+				System.err.println("File not found");
+				e.printStackTrace();
+			}
+		});
 	}
 	
-	// Send a random image from my Eggplant folder
+	// Send a random image from a folder to channel
 	static void sendRandomImage(IChannel channel){
 		File directoryPath;
 		File randomImage;
@@ -61,23 +63,15 @@ class BotUtils {
 		
 		directoryPath = new File("C:/Users/Andrew/Pictures/Eggplant"); //Change directory HERE
 		paths = directoryPath.listFiles(); // Returns pathnames for files and directories
-		
-//		// Prints all file/directory paths
-//		try{
-//			for(File path:paths){
-//				System.out.println(path);
-//			}
-//		} catch(Exception e){
-//			e.printStackTrace();
-//		}
-		
 		randomImage = paths[rand.nextInt(paths.length)];
 		
-		try{
-			channel.sendFile(randomImage);
-		} catch(FileNotFoundException e){
-			System.err.println("File not found");
-			e.printStackTrace();
-		}
+		RequestBuffer.request(() -> {
+			try{
+				channel.sendFile(randomImage);
+			} catch(FileNotFoundException e){
+				System.err.println("File not found");
+				e.printStackTrace();
+			}
+		});
 	}
 }
