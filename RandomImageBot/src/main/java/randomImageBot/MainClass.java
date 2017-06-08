@@ -1,6 +1,7 @@
-//Some code from the BasicBot in the Discord4J Documentation was used to get started
+// Some code from the BasicBot in the Discord4J Documentation was used to get started
+// Comment keywords: ERROR, SUGGESTION, WARNING
 
-package discordapitest;
+package randomImageBot;
 
 import java.io.IOException;
 

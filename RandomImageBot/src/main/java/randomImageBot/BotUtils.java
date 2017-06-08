@@ -1,8 +1,9 @@
-package discordapitest;
+package randomImageBot;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import sx.blah.discord.api.ClientBuilder;
@@ -15,8 +16,14 @@ class BotUtils {
 	
 	// Constants for use throughout the bot
 	static String BOT_PREFIX = "/";
-	// SUGGESTION: If bot goes down, this empties out. Maybe make backup as a text file
+	// SUGGESTION: If bot goes down, these empty out. Maybe make backup as a text file
 	private static ArrayList<String> admins = new ArrayList<String>();
+	private static HashMap<String, String> hashMap = new HashMap<String, String>();
+	
+	// Adding default folder path for /random
+	static {
+		hashMap.put("", "C:/Users/Andrew/Pictures/Carl"); // SUGGESTION: Call addFolder instead
+	}
 	
 	// Handles the creation and getting of a IDiscordClient object for a token
 	static IDiscordClient getBuiltDiscordClient(String token) {
@@ -55,24 +62,34 @@ class BotUtils {
 	}
 	
 	// Send a random image from a folder to channel
-	static void sendRandomImage(IChannel channel) {
+	static void sendRandomImage(IChannel channel, ArrayList<String> argsList) {
 		File directoryPath;
 		File randomImage;
 		File[] paths;
 		Random rand = new Random();
+		String fullListArgs;
 		
-		directoryPath = new File("C:/Users/Andrew/Pictures/Eggplant"); //Change directory HERE
-		paths = directoryPath.listFiles(); // Returns pathnames for files and directories
-		randomImage = paths[rand.nextInt(paths.length)];
+		fullListArgs = String.join(" ", argsList);
+		// Check if argsList is a key in namePath map object and then execute below code. If not, make an else statement saying "no"
+		if (hashMap.containsKey(fullListArgs)) {
+			directoryPath = new File(hashMap.get(fullListArgs));
+			paths = directoryPath.listFiles(); // Returns pathnames for files and directories
+			randomImage = paths[rand.nextInt(paths.length)];
 		
-		RequestBuffer.request(() -> {
-			try {
-				channel.sendFile(randomImage);
-			} catch (FileNotFoundException e) {
-				System.err.println("File not found");
-				e.printStackTrace();
-			}
-		});
+			RequestBuffer.request(() -> {
+				try {
+					channel.sendFile(randomImage);
+				} catch (FileNotFoundException e) {
+					System.err.println("File not found");
+					e.printStackTrace();
+				}
+			});
+		}
+		else {
+			sendMessage(channel, "That is not a valid keyword.");
+		}
+		System.out.println("argsList:"+fullListArgs);
+		System.out.println("hashMap:"+hashMap);
 	}
 	
 	// Add user as a Bot Admin to use dev commands
@@ -96,5 +113,10 @@ class BotUtils {
 		else {
 			sendMessage(channel, "That's not my token!");
 		}
+	}
+	
+	// Add folder and folder path as options for /pic [FOLDER NAME] if user if an admin
+	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
+		
 	}
 }
