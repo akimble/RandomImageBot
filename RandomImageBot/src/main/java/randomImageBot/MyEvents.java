@@ -38,16 +38,23 @@ public class MyEvents {
 			case "image":
 				BotUtils.sendImage(event.getChannel());
 				break;
-			case "random":
-				BotUtils.sendRandomImage(event.getChannel(), argsList);
-				break;
+			case "random": // Ensure /random has no arguments to be valid. Whitespace is fine though.
+				if (argsList.size() == 0) {
+					BotUtils.sendRandomImage(event.getChannel(), argsList);
+					break;
+				}
+				else {
+					BotUtils.sendMessage(event.getChannel(), "/random must have no arguments.");
+					break;
+				}
 			case "admin":
 				BotUtils.addAdmin(event.getChannel(), event.getAuthor().getStringID(), argsList);
 				break;
 			case "addFolder":
 				BotUtils.addFolder(event.getChannel(), event.getAuthor().getStringID(), argsList);
 				break;
-			case "pic": // WARNING: "/pic" or "/pic " will act like /random
+			// WARNING: "/pic" or "/pic " will act like /random. Intentional so users only need to use one core command rather than two
+			case "pic":
 				BotUtils.sendRandomImage(event.getChannel(), argsList);
 				break;
 				

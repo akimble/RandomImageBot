@@ -69,8 +69,8 @@ class BotUtils {
 		Random rand = new Random();
 		String fullListArgs;
 		
-		fullListArgs = String.join(" ", argsList);
-		// Check if argsList is a key in namePath map object and then execute below code. If not, make an else statement saying "no"
+		fullListArgs = String.join(" ", argsList); // Java 8 or later
+		// Check if argsList is a key in namePath map object and then execute below code
 		if (hashMap.containsKey(fullListArgs)) {
 			directoryPath = new File(hashMap.get(fullListArgs));
 			paths = directoryPath.listFiles(); // Returns pathnames for files and directories
@@ -86,10 +86,10 @@ class BotUtils {
 			});
 		}
 		else {
-			sendMessage(channel, "That is not a valid keyword.");
+			sendMessage(channel, "Please use valid keyword(s).");
 		}
-		System.out.println("argsList:"+fullListArgs);
-		System.out.println("hashMap:"+hashMap);
+		System.out.println("argsList:" + fullListArgs);
+		System.out.println("hashMap:" + hashMap);
 	}
 	
 	// Add user as a Bot Admin to use dev commands
@@ -98,9 +98,9 @@ class BotUtils {
 		
 		fullListToken = String.join(" ", argsList); // Java 8 or later
 		
-		System.out.println("UserID:"+UserID);
-		System.out.println("Bot Token:"+MainClass.BOT_TOKEN);
-		System.out.println("fullListToken:"+fullListToken);
+		System.out.println("UserID:" + UserID);
+		System.out.println("Bot Token:" + MainClass.BOT_TOKEN);
+		System.out.println("fullListToken:" + fullListToken);
 		
 		if (fullListToken.equals(MainClass.BOT_TOKEN)) { // Remember to use .equals to compare strings in Java
 			if (admins.contains(UserID)) 
@@ -111,12 +111,45 @@ class BotUtils {
 			}
 		}
 		else {
-			sendMessage(channel, "That's not my token!");
+			sendMessage(channel, "That's not my token.");
 		}
 	}
 	
 	// Add folder and folder path as options for /pic [FOLDER NAME] if user if an admin
 	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
+		String folderName;
+		String folderPath;
 		
+		// Make sure the folder name is not a folder path (probably better ways to do this) and vice versa
+		if (!argsList.get(0).contains("/")) {
+			folderName = argsList.get(0);
+		}
+		else {
+			sendMessage(channel, "Folder name cannot contain '/'");
+			return;
+		}
+		if (argsList.get(1).contains("/")) {
+			folderPath = argsList.get(1);
+		}
+		else {
+			sendMessage(channel, "That's not a proper folder path (needs '/''s in it).");
+			return;
+		}
+		
+		// If the user is a bot admin...
+		if (admins.contains(UserID)) {
+			// ...and if there are only two arguments (folderName folderPath)...
+			if (argsList.size() == 2) {
+				// ...add the folderName and folderPath to hashMap
+				hashMap.put(folderName, folderPath); // WARNING: Adding the same key will replace the value
+				sendMessage(channel, folderName + " - " + folderPath + " added.");
+			}
+			else {
+				sendMessage(channel, "Too few or too many arguments.");
+			}
+		}
+		else {
+			sendMessage(channel, "Only Bot Admins can use this command.");
+		}
 	}
 }
