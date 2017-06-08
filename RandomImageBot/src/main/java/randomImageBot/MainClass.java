@@ -9,6 +9,7 @@ import sx.blah.discord.api.IDiscordClient;
 
 public class MainClass {
 	
+	static IDiscordClient cli;
 	static String BOT_TOKEN;
 	
 	public static void main(String[] args) throws IOException {
@@ -18,7 +19,7 @@ public class MainClass {
 			return;
 		}
 		
-		IDiscordClient cli = BotUtils.getBuiltDiscordClient(args[0]);
+		cli = BotUtils.getBuiltDiscordClient(args[0]);
 		
 		// Initialize BOT_TOKEN
 		BOT_TOKEN = cli.getToken(); // WARNING: Starts with "BOT "

@@ -57,6 +57,10 @@ public class MyEvents {
 			case "pic":
 				BotUtils.sendRandomImage(event.getChannel(), argsList);
 				break;
+			// Logs out the client (bot). WARNING: Logs out ALL clients? Will the bot log out of ALL servers? What if you do it in a PM?
+			case "sleep":
+				MainClass.cli.logout();
+				break;
 				
 		}
 	}
