@@ -2,6 +2,7 @@ package discordapitest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import sx.blah.discord.api.ClientBuilder;
@@ -14,14 +15,14 @@ class BotUtils {
 	
 	// Constants for use throughout the bot
 	static String BOT_PREFIX = "/";
+	// SUGGESTION: If bot goes down, this empties out. Maybe make backup as a text file
+	private static ArrayList<String> admins = new ArrayList<String>();
 	
 	// Handles the creation and getting of a IDiscordClient object for a token
 	static IDiscordClient getBuiltDiscordClient(String token) {
-		
 		// The ClientBuilder object is where you will attach your params for configuring the instance of your bot.
 		// Such as withToken, setDaemon etc
 		return new ClientBuilder().withToken(token).build();
-		
 	}
 	
 	// Send a message to channel
@@ -72,5 +73,28 @@ class BotUtils {
 				e.printStackTrace();
 			}
 		});
+	}
+	
+	// Add user as a Bot Admin to use dev commands
+	static void addAdmin(IChannel channel, String UserID, ArrayList<String> argsList) {
+		String fullListToken;
+		
+		fullListToken = String.join(" ", argsList); // Java 8 or later
+		
+		System.out.println("UserID:"+UserID);
+		System.out.println("Bot Token:"+MainClass.BOT_TOKEN);
+		System.out.println("fullListToken:"+fullListToken);
+		
+		if (fullListToken.equals(MainClass.BOT_TOKEN)) { // Remember to use .equals to compare strings in Java
+			if (admins.contains(UserID)) 
+				sendMessage(channel, "You're already a Bot Admin.");
+			else {
+				admins.add(UserID);
+				sendMessage(channel, "You are now a Bot Admin.");
+			}
+		}
+		else {
+			sendMessage(channel, "That's not my token!");
+		}
 	}
 }
