@@ -60,7 +60,7 @@ public class MyEvents {
 				break;
 			// Logs out the client (bot). WARNING: Logs out the bot on all servers.
 			case "sleep":
-				MainClass.cli.logout();
+				BotUtils.sleep(event.getChannel(), event.getAuthor().getStringID());
 				break;
 				
 		}

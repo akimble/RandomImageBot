@@ -134,7 +134,7 @@ class BotUtils {
 		}
 	}
 	
-	// Add folder and folder path as options for /pic [FOLDER NAME] if user if an admin
+	// Add folder and folder path as options for /pic [FOLDER NAME] if user if a Bot Admin
 	// SUGGESTION: If the folder doesn't exist it returns NullPointer. Check with Absolute Paths...
 	// ...This will allow addFolder to call an error if the folder doesn't exist
 	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
@@ -162,6 +162,16 @@ class BotUtils {
 			else {
 				sendMessage(channel, "Too few or too many arguments.");
 			}
+		}
+		else {
+			sendMessage(channel, "Only Bot Admins can use this command.");
+		}
+	}
+	
+	// Logs out the client if the user is a Bot Admin
+	static void sleep(IChannel channel, String UserID) {
+		if (admins.contains(UserID)) {
+			MainClass.cli.logout();
 		}
 		else {
 			sendMessage(channel, "Only Bot Admins can use this command.");
