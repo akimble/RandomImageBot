@@ -35,13 +35,13 @@ public class MyEvents {
 			case "test":
 				BotUtils.sendMessage(event.getChannel(), "I am sending a message from an EventSubscriber listener");
 				break;
-			case "image":
-				BotUtils.sendImage(event.getChannel());
+			case "image": // WARNING: Can still send a file other than an image if desired
+				BotUtils.sendFile(event.getChannel());
 				break;
 			// Ensure /random has no arguments to be valid. Whitespace is fine though.
 			case "random":
 				if (argsList.size() == 0) {
-					BotUtils.sendRandomImage(event.getChannel(), argsList);
+					BotUtils.sendRandomFile(event.getChannel(), argsList);
 					break;
 				}
 				else {
@@ -56,7 +56,7 @@ public class MyEvents {
 				break;
 			// WARNING: "/pic" or "/pic " will act like /random. Intentional so users only need to use one core command rather than two
 			case "pic":
-				BotUtils.sendRandomImage(event.getChannel(), argsList);
+				BotUtils.sendRandomFile(event.getChannel(), argsList);
 				break;
 			// Logs out the client (bot). WARNING: Logs out the bot on all servers.
 			case "sleep":

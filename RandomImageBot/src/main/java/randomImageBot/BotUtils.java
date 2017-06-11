@@ -2,6 +2,7 @@ package randomImageBot;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -22,7 +23,7 @@ class BotUtils {
 	
 	// Adding default folder path for /random
 	static {
-		hashMap.put("", "C:/Users/Andrew/Pictures/Carl"); // SUGGESTION: Call addFolder instead
+		hashMap.put("", "C:\\Users\\Andrew\\Pictures\\Carl");
 	}
 	
 	// Handles the creation and getting of a IDiscordClient object for a token
@@ -45,11 +46,11 @@ class BotUtils {
 		
 	}
 	
-	// Send an image from a folder to channel
-	static void sendImage(IChannel channel) {
+	// Send an file from a folder to the channel
+	static void sendFile(IChannel channel) {
 		File pathToFile;
 		
-		pathToFile = new File("C:/Users/Andrew/Pictures/Fbt3pvR.png"); //Change image path HERE
+		pathToFile = new File("C:/Users/Andrew/Pictures/Fbt3pvR.png"); //Change file path HERE
 		
 		RequestBuffer.request(() -> {
 			try {
@@ -61,24 +62,41 @@ class BotUtils {
 		});
 	}
 	
-	// Send a random image from a folder to channel
-	static void sendRandomImage(IChannel channel, ArrayList<String> argsList) {
+	// Return the pathnames inside a folder
+	static File[] returnPathnames(IChannel channel, String fullListArgs) {
 		File directoryPath;
-		File randomImage;
 		File[] paths;
-		Random rand = new Random();
-		String fullListArgs;
 		
-		fullListArgs = String.join(" ", argsList); // Java 8 or later
 		// Check if argsList is a key in namePath map object and then execute below code
 		if (hashMap.containsKey(fullListArgs)) {
 			directoryPath = new File(hashMap.get(fullListArgs));
-			paths = directoryPath.listFiles(); // Returns pathnames for files and directories
-			randomImage = paths[rand.nextInt(paths.length)];
+			// Returns pathnames for files and directories
+			paths = directoryPath.listFiles();
+		}
+		else {
+			paths = null;
+			sendMessage(channel, "Please use valid keyword(s).");
+		}
+		return paths;
+	}
+	
+	// Send a random file from a folder to channel
+	static void sendRandomFile(IChannel channel, ArrayList<String> argsList) {
+		File[] paths;
+		Random rand = new Random();
+		String fullListArgs;
+		File randomFile;
 		
+		fullListArgs = String.join(" ", argsList); // Java 8 or later
+		paths = returnPathnames(channel, fullListArgs);
+		// If there are files in the folder (and it's an actual folder)...
+		if (paths != null) {
+			// ...choose a random file
+			randomFile = paths[rand.nextInt(paths.length)];
+			
 			RequestBuffer.request(() -> {
 				try {
-					channel.sendFile(randomImage);
+					channel.sendFile(randomFile);
 				} catch (FileNotFoundException e) {
 					System.err.println("File not found");
 					e.printStackTrace();
@@ -86,8 +104,9 @@ class BotUtils {
 			});
 		}
 		else {
-			sendMessage(channel, "Please use valid keyword(s).");
+			sendMessage(channel, "Choose a folder at the end of the path name when using /addFolder.");
 		}
+		
 		System.out.println("argsList:" + fullListArgs);
 		System.out.println("hashMap:" + hashMap);
 	}
@@ -116,34 +135,29 @@ class BotUtils {
 	}
 	
 	// Add folder and folder path as options for /pic [FOLDER NAME] if user if an admin
-	// ERROR: Folders with spaces breaks up an argument into more depending on how many spaces there are
+	// SUGGESTION: If the folder doesn't exist it returns NullPointer. Check with Absolute Paths...
+	// ...This will allow addFolder to call an error if the folder doesn't exist
 	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
-		String folderName;
-		String folderPath;
-		
-		// Make sure the folder name is not a folder path (probably better ways to do this) and vice versa
-		if (!argsList.get(0).contains("/")) {
-			folderName = argsList.get(0);
-		}
-		else {
-			sendMessage(channel, "Folder name cannot contain '/'");
-			return;
-		}
-		if (argsList.get(1).contains("/")) {
-			folderPath = argsList.get(1);
-		}
-		else {
-			sendMessage(channel, "That's not a proper folder path (needs '/''s in it).");
-			return;
-		}
-		
-		// If the user is a bot admin...
+		// If the user is a Bot Admin...
 		if (admins.contains(UserID)) {
+			String folderName;
+			String folderPath;
+			
 			// ...and if there are only two arguments (folderName folderPath)...
 			if (argsList.size() == 2) {
-				// ...add the folderName and folderPath to hashMap
-				hashMap.put(folderName, folderPath); // WARNING: Adding the same key will replace the value
-				sendMessage(channel, folderName + " - " + folderPath + " added.");
+				folderName = argsList.get(0);
+				argsList.remove(0); // Remove the folder name from argsList
+				folderPath = String.join(" ", argsList);
+				
+				// ...and if the folderPath is valid (and not a file path)...
+				if (Paths.get(folderPath) != null) {
+					// ...add the folderName and folderPath to hashMap
+					hashMap.put(folderName, folderPath); // WARNING: Adding the same key will replace the value
+					sendMessage(channel, folderName + " - " + folderPath + " added.");
+				}
+				else {
+					sendMessage(channel, folderPath + " is not a valid FOLDER path.");
+				}
 			}
 			else {
 				sendMessage(channel, "Too few or too many arguments.");
