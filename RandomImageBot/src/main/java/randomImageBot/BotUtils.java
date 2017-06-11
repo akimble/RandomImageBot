@@ -17,8 +17,8 @@ class BotUtils {
 	// Constants for use throughout the bot
 	static String BOT_PREFIX = "/";
 	// SUGGESTION: If bot goes down, these empty out. Maybe make backup as a text file
-	private static ArrayList<String> admins = new ArrayList<String>();
-	private static HashMap<String, String> hashMap = new HashMap<String, String>();
+	static ArrayList<String> admins = new ArrayList<String>();
+	static HashMap<String, String> hashMap = new HashMap<String, String>();
 	
 	// Adding default folder path for /random
 	static {
@@ -116,6 +116,7 @@ class BotUtils {
 	}
 	
 	// Add folder and folder path as options for /pic [FOLDER NAME] if user if an admin
+	// ERROR: Folders with spaces breaks up an argument into more depending on how many spaces there are
 	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
 		String folderName;
 		String folderPath;

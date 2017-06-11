@@ -38,7 +38,8 @@ public class MyEvents {
 			case "image":
 				BotUtils.sendImage(event.getChannel());
 				break;
-			case "random": // Ensure /random has no arguments to be valid. Whitespace is fine though.
+			// Ensure /random has no arguments to be valid. Whitespace is fine though.
+			case "random":
 				if (argsList.size() == 0) {
 					BotUtils.sendRandomImage(event.getChannel(), argsList);
 					break;
@@ -57,7 +58,7 @@ public class MyEvents {
 			case "pic":
 				BotUtils.sendRandomImage(event.getChannel(), argsList);
 				break;
-			// Logs out the client (bot). WARNING: Logs out ALL clients? Will the bot log out of ALL servers? What if you do it in a PM?
+			// Logs out the client (bot). WARNING: Logs out the bot on all servers.
 			case "sleep":
 				MainClass.cli.logout();
 				break;
