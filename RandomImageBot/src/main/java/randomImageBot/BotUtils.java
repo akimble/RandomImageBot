@@ -62,22 +62,32 @@ class BotUtils {
 		});
 	}
 	
-	// Return the pathnames inside a folder
+	// Return the file names inside a directory
 	static File[] returnPathnames(IChannel channel, String fullListArgs) {
 		File directoryPath;
 		File[] paths;
+		File[] filePathsArray;
+		ArrayList<File> filePaths = new ArrayList<File>();;
 		
 		// Check if argsList is a key in namePath map object and then execute below code
 		if (hashMap.containsKey(fullListArgs)) {
 			directoryPath = new File(hashMap.get(fullListArgs));
 			// Returns pathnames for files and directories
 			paths = directoryPath.listFiles();
+			// Filter out the directories
+			for (File file : paths) {
+				if (file.isFile()) 
+					filePaths.add(file);
+			}
 		}
 		else {
 			paths = null;
 			sendMessage(channel, "Please use valid keyword(s).");
 		}
-		return paths;
+		
+		filePathsArray = filePaths.toArray(new File[filePaths.size()]);
+		
+		return filePathsArray;
 	}
 	
 	// Send a random file from a folder to channel
@@ -93,6 +103,10 @@ class BotUtils {
 		if (paths != null) {
 			// ...choose a random file
 			randomFile = paths[rand.nextInt(paths.length)];
+//			// While randomFile is a directory, reroll for a file
+//			while (randomFile.isDirectory()) {
+//				randomFile = paths[rand.nextInt(paths.length)];
+//			}
 			
 			RequestBuffer.request(() -> {
 				try {
@@ -137,6 +151,8 @@ class BotUtils {
 	// Add folder and folder path as options for /pic [FOLDER NAME] if user if a Bot Admin
 	// SUGGESTION: If the folder doesn't exist it returns NullPointer. Check with Absolute Paths...
 	// ...This will allow addFolder to call an error if the folder doesn't exist
+	// WARNING: Multiple admins can play around on your PC by seeing what folders exist and uploading...
+	// files from them. Be careful who you let become an admin (ideally it should be only you)!
 	static void addFolder(IChannel channel, String UserID, ArrayList<String> argsList) {
 		// If the user is a Bot Admin...
 		if (admins.contains(UserID)) {
