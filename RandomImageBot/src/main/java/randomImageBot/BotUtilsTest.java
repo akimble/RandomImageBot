@@ -55,7 +55,6 @@ public class BotUtilsTest {
 		String arg3;
 		String arg4;
 		String arg5;
-		String arg6;
 		
 		// Initialize testHashMap because of the static block in BotUtils
 		testHashMap.put("", "C:\\Users\\Andrew\\Pictures\\Carl");
@@ -67,7 +66,6 @@ public class BotUtilsTest {
 		arg3 = "C:/pictures/folder2";
 		arg4 = "C:\\pictures/folder2";
 		arg5 = "C:\\pictures\\new folder";
-		arg6 = "C:/pictures/new folder";
 		
 		// Test for "\\" in folder path (second argument)
 		argsList.add(arg0);
@@ -95,21 +93,12 @@ public class BotUtilsTest {
 		
 		assertEquals(testHashMap, BotUtils.hashMap);
 		
-		// Test for spaces in folder path
+		// Test for spaces in the folder path
 		argsList.clear();
 		argsList.add(arg2);
 		argsList.add(arg5);
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		testHashMap.put(arg2, arg5);
-		
-		assertEquals(testHashMap, BotUtils.hashMap);
-		
-		// Test for spaces in the folder path
-		argsList.clear();
-		argsList.add(arg2);
-		argsList.add(arg6);
-		BotUtils.addFolder(null, "uniqueUserID", argsList);
-		testHashMap.put(arg2, arg6);
 		
 		assertEquals(testHashMap, BotUtils.hashMap);
 		
