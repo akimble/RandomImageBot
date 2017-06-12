@@ -31,12 +31,15 @@ public class MyEvents {
 		// Begin the switch to handle the string to command mappings. It's likely wise to pass the whole event or
 		// some part (IChannel) to the command handling it
 		switch (commandStr) {
-		
-			case "test":
-				BotUtils.sendMessage(event.getChannel(), "I am sending a message from an EventSubscriber listener");
+			case "addFolder":
+				BotUtils.addFolder(event.getChannel(), event.getAuthor().getStringID(), argsList);
 				break;
-			case "image": // WARNING: Can still send a file other than an image if desired
-				BotUtils.sendFile(event.getChannel());
+			case "admin":
+				BotUtils.addAdmin(event.getChannel(), event.getAuthor().getStringID(), argsList);
+				break;
+			// WARNING: "/pic" or "/pic " will act like /random. Intentional so users only need to use one core command rather than two
+			case "pic":
+				BotUtils.sendRandomFile(event.getChannel(), argsList);
 				break;
 			// Ensure /random has no arguments to be valid. Whitespace is fine though.
 			case "random":
@@ -48,21 +51,13 @@ public class MyEvents {
 					BotUtils.sendMessage(event.getChannel(), "/random must have no arguments.");
 					break;
 				}
-			case "admin":
-				BotUtils.addAdmin(event.getChannel(), event.getAuthor().getStringID(), argsList);
-				break;
-			case "addFolder":
-				BotUtils.addFolder(event.getChannel(), event.getAuthor().getStringID(), argsList);
-				break;
-			// WARNING: "/pic" or "/pic " will act like /random. Intentional so users only need to use one core command rather than two
-			case "pic":
-				BotUtils.sendRandomFile(event.getChannel(), argsList);
-				break;
 			// Logs out the client (bot). WARNING: Logs out the bot on all servers.
 			case "sleep":
 				BotUtils.sleep(event.getChannel(), event.getAuthor().getStringID());
 				break;
-				
+			case "test":
+				BotUtils.sendMessage(event.getChannel(), "I am sending a message from an EventSubscriber listener");
+				break;
 		}
 	}
 }

@@ -46,15 +46,11 @@ class BotUtils {
 		
 	}
 	
-	// Send an file from a folder to the channel
-	static void sendFile(IChannel channel) {
-		File pathToFile;
-		
-		pathToFile = new File("C:/Users/Andrew/Pictures/Fbt3pvR.png"); //Change file path HERE
-		
+	// Send a file from a folder to the channel
+	static void sendFile(IChannel channel, File randomFile) {
 		RequestBuffer.request(() -> {
 			try {
-				channel.sendFile(pathToFile);
+				channel.sendFile(randomFile);
 			} catch (FileNotFoundException e) {
 				System.err.println("File not found");
 				e.printStackTrace();
@@ -62,19 +58,19 @@ class BotUtils {
 		});
 	}
 	
-	// Return the file names inside a directory
+	// Return the pathnames for files inside a folder
 	static File[] returnPathnames(IChannel channel, String fullListArgs) {
-		File directoryPath;
+		File folderPath;
 		File[] paths;
 		File[] filePathsArray;
 		ArrayList<File> filePaths = new ArrayList<File>();;
 		
 		// Check if argsList is a key in namePath map object and then execute below code
 		if (hashMap.containsKey(fullListArgs)) {
-			directoryPath = new File(hashMap.get(fullListArgs));
-			// Returns pathnames for files and directories
-			paths = directoryPath.listFiles();
-			// Filter out the directories
+			folderPath = new File(hashMap.get(fullListArgs));
+			// Returns pathnames for files and folders
+			paths = folderPath.listFiles();
+			// Filter out the folders
 			for (File file : paths) {
 				if (file.isFile()) 
 					filePaths.add(file);
@@ -101,21 +97,9 @@ class BotUtils {
 		paths = returnPathnames(channel, fullListArgs);
 		// If there are files in the folder (and it's an actual folder)...
 		if (paths != null) {
-			// ...choose a random file
+			// ...choose a random file and send it to the "channel"
 			randomFile = paths[rand.nextInt(paths.length)];
-//			// While randomFile is a directory, reroll for a file
-//			while (randomFile.isDirectory()) {
-//				randomFile = paths[rand.nextInt(paths.length)];
-//			}
-			
-			RequestBuffer.request(() -> {
-				try {
-					channel.sendFile(randomFile);
-				} catch (FileNotFoundException e) {
-					System.err.println("File not found");
-					e.printStackTrace();
-				}
-			});
+			sendFile(channel, randomFile);
 		}
 		else {
 			sendMessage(channel, "Choose a folder at the end of the path name when using /addFolder.");
