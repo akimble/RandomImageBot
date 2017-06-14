@@ -73,7 +73,7 @@ public class BotUtilsTest {
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		testHashMap.put(arg0, arg1);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 		
 		// Test for only "/" in folder path
 		argsList.clear();
@@ -82,7 +82,7 @@ public class BotUtilsTest {
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		testHashMap.put(arg2, arg3);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 		
 		// Test for "\\" and "/" in folder path
 		argsList.clear();
@@ -91,7 +91,7 @@ public class BotUtilsTest {
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		testHashMap.put(arg2, arg4);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 		
 		// Test for spaces in the folder path
 		argsList.clear();
@@ -100,13 +100,13 @@ public class BotUtilsTest {
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		testHashMap.put(arg2, arg5);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 		
 		// Test with no arguments
 		argsList.clear();
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 		
 		// Test with more than 2 arguments
 		argsList.add(arg0);
@@ -115,7 +115,7 @@ public class BotUtilsTest {
 		argsList.add(arg3);
 		BotUtils.addFolder(null, "uniqueUserID", argsList);
 		
-		assertEquals(testHashMap, BotUtils.hashMap);
+		assertEquals(testHashMap, BotUtils.keywordToPath);
 	}
 
 }
