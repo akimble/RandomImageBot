@@ -1,3 +1,11 @@
+// The changes to storing admin userIDs and the keywordToPath hashmap in text files have broken these tests.
+// Honestly this testing is making programming this bot less fun because I have to spend time writing tests
+// instead of working on new functionality. I feel like any time I save with these particular unit tests
+// doesn't make up for the time I spend writing them (I'm probably too new to appreciate them). This program
+// may also be too small to really benefit greatly from them.
+
+// Will stay BORKED until I find a good reason to add back the testing.
+
 package randomImageBot;
 
 import static org.junit.Assert.*;

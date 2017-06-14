@@ -22,3 +22,11 @@ A Discord bot that uses the Discord4J unofficial API to listen for commands (in 
     
   - /sleep
     - Make bot go offline
+
+### Additional Information:
+
+  - There are two text files (admins.txt and keywordToPath.txt) in /RandomImageBot/src/main/resources/text files/ that hold Bot Admin userIDs and /pic KEYWORD and PATH entries, respectively.
+    Delete these or change them manually if desired to remove/change Bot Admins or /pic KEYWORDS and PATHS. For keywordToPath, if the KEYWORD is the same in more than one line, the PATH in
+    the line closet to the bottom is read in for that KEYWORD.
+    
+  - Bot Admins can peruse and upload unprotected files from the hosts PC. Be wary of who you add to this role (ideally only the host should be a Bot Admin).

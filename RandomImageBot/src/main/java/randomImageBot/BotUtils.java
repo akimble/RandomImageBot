@@ -1,11 +1,17 @@
 package randomImageBot;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import sx.blah.discord.api.ClientBuilder;
@@ -26,6 +32,8 @@ class BotUtils {
 	// Adding default folder path for /random
 	// SUGGESTION: Make /setRandom method
 	static {
+		admins = readFile(BOT_ADMINS_FILENAME);
+		keywordToPath = readHashMapFile(BOT_KEYWORDTOPATH_FILENAME); System.out.println("hashmap: " + keywordToPath);
 		keywordToPath.put("", "C:\\Users\\Andrew\\Pictures\\Carl");
 	}
 	
@@ -62,7 +70,7 @@ class BotUtils {
 	}
 	
 	// Return the pathnames for files inside a folder
-	static File[] returnPathnames(IChannel channel, String fullListArgs) {
+	private static File[] returnPathnames(IChannel channel, String fullListArgs) {
 		File folderPath;
 		File[] paths;
 		File[] filePathsArray;
@@ -81,7 +89,6 @@ class BotUtils {
 		}
 		else {
 			paths = null;
-			sendMessage(channel, "Please use valid keyword(s).");
 		}
 		
 		filePathsArray = filePaths.toArray(new File[filePaths.size()]);
@@ -99,13 +106,13 @@ class BotUtils {
 		fullListArgs = String.join(" ", argsList); // Java 8 or later
 		paths = returnPathnames(channel, fullListArgs);
 		// If there are files in the folder (and it's an actual folder)...
-		if (paths != null) {
+		if (paths.length > 0) {
 			// ...choose a random file and send it to the "channel"
 			randomFile = paths[rand.nextInt(paths.length)];
 			sendFile(channel, randomFile);
 		}
 		else {
-			sendMessage(channel, "Choose a folder at the end of the path name when using /addFolder.");
+			sendMessage(channel, "Please use a valid keyword.");
 		}
 		
 		System.out.println("argsList:" + fullListArgs);
@@ -135,7 +142,6 @@ class BotUtils {
 	// Add folder and folder path as options for /pic [FOLDER NAME] if user if a Bot Admin
 	// SUGGESTION: If the folder doesn't exist it returns NullPointer. Check with Absolute Paths...
 	// ...This will allow addFolder to call an error if the folder doesn't exist
-	// ERROR: adds Duplicates in writeToFile even if readFromFile was made
 	// WARNING: Multiple admins can play around on your PC by seeing what folders exist and uploading...
 	// files from them. Be careful who you let become an admin (ideally it should be only you)!
 	static void addFolder(IChannel channel, String userID, ArrayList<String> argsList) {
@@ -145,19 +151,25 @@ class BotUtils {
 			String folderPath;
 			String concatenatedHashMapEntry;
 			
-			// ...and if there are only two arguments (folderName folderPath)...
-			if (argsList.size() == 2) {
+			// ...and if there are more than two arguments...
+			if (argsList.size() >= 2) {
 				folderName = argsList.get(0);
 				argsList.remove(0); // Remove the folder name from argsList
 				folderPath = String.join(" ", argsList);
 				
-				// ...and if the folderPath is valid (and not a file path)...
+				// ...and if the folderPath is valid (and not a FILE path)...
 				if (Paths.get(folderPath) != null) {
-					// ...add the folderName and folderPath to keywordToPath
-					keywordToPath.put(folderName, folderPath); // WARNING: Adding the same key will replace the value
-					concatenatedHashMapEntry = folderName + " " + folderPath;
-					writeToFile(concatenatedHashMapEntry, BOT_KEYWORDTOPATH_FILENAME);
-					sendMessage(channel, folderName + " - " + folderPath + " added.");
+					// ...and if there are no duplicate KEYS in keywordToPath...
+					if (!keywordToPath.containsKey(folderName)) {
+						// ...add the folderName and folderPath to keywordToPath and write to file
+						keywordToPath.put(folderName, folderPath);
+						concatenatedHashMapEntry = folderName + " " + folderPath;
+						writeToFile(concatenatedHashMapEntry, BOT_KEYWORDTOPATH_FILENAME);
+						sendMessage(channel, folderName + " - " + folderPath + " added.");
+					}
+					else {
+						sendMessage(channel, "The key '" + folderName + "' is already in use.");
+					}
 				}
 				else {
 					sendMessage(channel, folderPath + " is not a valid FOLDER path.");
@@ -182,9 +194,8 @@ class BotUtils {
 		}
 	}
 	
-	// Write a string to a text file
-	// ERROR: Remember to make the readFromFile method to keep it from adding duplicate entries by reading in everything once into
-	// admins and keyworthToPath arrayLists
+	// Write a string to a text file. Could write object to file when /sleep is used for less I/O operations, but then
+	// if there's a crash then changes to admins or keywordToPath since the last /sleep command will not be saved.
 	private static void writeToFile(String writeThisString, String fileName) {
 		try {
 			// Using a FileWriter since there's only one write before I close it. BufferedWriter would cause too much overhead
@@ -196,5 +207,53 @@ class BotUtils {
 			System.err.println("Message could not be sent with error: ");
 			e.printStackTrace();
 		}
+	}
+	
+	// Read file contents from a text file and return them in an ArrayList
+	private static ArrayList<String> readFile(String fileName) {
+		ArrayList<String> contentsArrayList = new ArrayList<String>();
+		
+		try {
+			Path filePath = Paths.get(".\\src\\main\\resources\\text files\\" + fileName);
+			List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8); // readAllLines returns List<Object>
+			contentsArrayList.addAll(lines); // Essentially List -> ArrayList in this case
+		} catch (Exception e) {
+			System.err.println("Message could not be sent with error: ");
+			e.printStackTrace();
+		}
+		
+		return contentsArrayList;
+	}
+	
+	// Read file contents from a test file holding hashMap values and return them in a hashMap
+	private static HashMap<String, String> readHashMapFile(String fileName) {
+		HashMap<String, String> contentsHashMap = new HashMap<String, String>();
+		
+		try {
+			String line;
+			BufferedReader reader = new BufferedReader(new FileReader(".\\src\\main\\resources\\text files\\" + fileName));
+			
+			// While there are more lines in the text file, split each line by the space between the KEYWORD and PATH
+			// and store it in contentsHashMap, else ignore the line
+			while ((line = reader.readLine()) != null) {
+				String[] parts = line.split(" ", 2);
+				
+				if (parts.length == 2) {
+					String key = parts[0];
+					String value = parts[1];
+					contentsHashMap.put(key, value);
+				}
+				else {
+					System.out.println("Ignoring line: " + line);
+				}
+			}
+			
+			reader.close();
+		} catch (Exception e) {
+			System.err.println("Message could not be sent with error: ");
+			e.printStackTrace();
+		}
+		
+		return contentsHashMap;
 	}
 }
