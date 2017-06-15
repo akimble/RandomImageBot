@@ -30,3 +30,8 @@ A Discord bot that uses the Discord4J unofficial API to listen for commands (in 
     the line closet to the bottom is read in for that KEYWORD.
     
   - Bot Admins can peruse and upload unprotected files from the hosts PC. Be wary of who you add to this role (ideally only the host should be a Bot Admin).
+  
+  - Before creating a JAR file of the project, change the path names in readFile, readHashMapFile, and writeToFile in BotUtils to ".\\" (the current path is just for easier testing in Eclipse).
+    Also create text files for admins.txt and keywordToPath.txt and place them IN the same folder as the JAR file (wherever you put it). Also make sure the folder they are in allows
+    you to write into it because the JAR file needs to create a modules folder due to Maven (it's not used but will throw an error if it can't create it). After that, you can just "cd" into
+    the folder in CMD and type "java -jar yourJar.jar yourBotToken" to run the RandomImageBot program.

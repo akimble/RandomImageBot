@@ -1,2 +1,4 @@
 new C:\Users\Andrew\Copybox\New_folder
 misc C:\Users\Andrew\Pictures\Miscellaneous
+other C:\Users\Andrew\Copybox\New_folder\Other
+cat C:\Users\Andrew\Pictures\Cat

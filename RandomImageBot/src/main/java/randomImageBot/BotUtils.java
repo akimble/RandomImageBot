@@ -200,7 +200,7 @@ class BotUtils {
 		try {
 			// Using a FileWriter since there's only one write before I close it. BufferedWriter would cause too much overhead
 			// Starting with .\\src\\... because apparently Eclipse makes the project directory the working directory
-			FileWriter f1 = new FileWriter(".\\src\\main\\resources\\text files\\" + fileName, true);
+			FileWriter f1 = new FileWriter(".\\src\\main\\resources\\text files\\" + fileName, true); // Change path to ".\\" before creating a JAR
 			f1.write(writeThisString + "\n");
 			f1.close();
 		} catch (Exception e) {
@@ -214,7 +214,7 @@ class BotUtils {
 		ArrayList<String> contentsArrayList = new ArrayList<String>();
 		
 		try {
-			Path filePath = Paths.get(".\\src\\main\\resources\\text files\\" + fileName);
+			Path filePath = Paths.get(".\\src\\main\\resources\\text files\\" + fileName); // Change path to ".\\" before creating a JAR
 			List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8); // readAllLines returns List<Object>
 			contentsArrayList.addAll(lines); // Essentially List -> ArrayList in this case
 		} catch (Exception e) {
@@ -231,7 +231,7 @@ class BotUtils {
 		
 		try {
 			String line;
-			BufferedReader reader = new BufferedReader(new FileReader(".\\src\\main\\resources\\text files\\" + fileName));
+			BufferedReader reader = new BufferedReader(new FileReader(".\\src\\main\\resources\\text files\\" + fileName)); // Change path to ".\\" before creating a JAR
 			
 			// While there are more lines in the text file, split each line by the space between the KEYWORD and PATH
 			// and store it in contentsHashMap, else ignore the line
