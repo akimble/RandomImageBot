@@ -1,5 +1,20 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Author: Andrew Kimble
+// Last Edited: 6/18/2017
+// Language: Java 1.8
+// API: Discord4j (unofficial Discord API)
+//
+// Goal: Upload a random image from one of the folders on the hosts system, 
+// specified through the use of a "Bot Admin" adding folders to randomly pull from.
+//
+// Details: A Discord bot coded in Java that uses the Discord4J unofficial API to listen for commands (in the form of messages /test, /random, etc.) and
+// sends feedback. The feedback ranges from sending a message back, uploading images, or uploading files. Bot admins can be added using the bot's token with
+// /admin [TOKEN] to have access to various commands (/sleep and /addFolder). Using /addFolder [KEYWORD] [PATH] a bot admin can add a keyword and folder
+// that the bot will randomly upload images from when given the /pic [KEYWORD] command in the channel.
+//
 // Some code from the BasicBot in the Discord4J Documentation was used to get started
 // Comment keywords: ERROR, SUGGESTION, WARNING
+///////////////////////////////////////////////////////////////////////////////
 
 package randomImageBot;
 

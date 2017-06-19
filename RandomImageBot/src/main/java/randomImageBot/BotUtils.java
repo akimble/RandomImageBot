@@ -29,11 +29,11 @@ class BotUtils {
 	static ArrayList<String> admins = new ArrayList<String>();
 	static HashMap<String, String> keywordToPath = new HashMap<String, String>();
 	
-	// Adding default folder path for /random
 	// SUGGESTION: Make /setRandom method
 	static {
 		admins = readFile(BOT_ADMINS_FILENAME);
-		keywordToPath = readHashMapFile(BOT_KEYWORDTOPATH_FILENAME); System.out.println("hashmap: " + keywordToPath);
+		keywordToPath = readHashMapFile(BOT_KEYWORDTOPATH_FILENAME);
+		// Adding default folder path for /random
 		keywordToPath.put("", "C:\\Users\\Andrew\\Pictures\\Carl");
 	}
 	
@@ -71,13 +71,14 @@ class BotUtils {
 	
 	// Return the pathnames for files inside a folder
 	private static File[] returnPathnames(IChannel channel, String fullListArgs) {
-		File folderPath;
-		File[] paths;
 		File[] filePathsArray;
 		ArrayList<File> filePaths = new ArrayList<File>();;
 		
 		// Check if argsList is a key in namePath map object and then execute below code
 		if (keywordToPath.containsKey(fullListArgs)) {
+			File folderPath;
+			File[] paths;
+			
 			folderPath = new File(keywordToPath.get(fullListArgs));
 			// Returns pathnames for files and folders
 			paths = folderPath.listFiles();
@@ -86,9 +87,6 @@ class BotUtils {
 				if (file.isFile()) 
 					filePaths.add(file);
 			}
-		}
-		else {
-			paths = null;
 		}
 		
 		filePathsArray = filePaths.toArray(new File[filePaths.size()]);
@@ -99,14 +97,16 @@ class BotUtils {
 	// Send a random file from a folder to channel
 	static void sendRandomFile(IChannel channel, ArrayList<String> argsList) {
 		File[] paths;
-		Random rand = new Random();
 		String fullListArgs;
-		File randomFile;
 		
 		fullListArgs = String.join(" ", argsList); // Java 8 or later
 		paths = returnPathnames(channel, fullListArgs);
+		
 		// If there are files in the folder (and it's an actual folder)...
 		if (paths.length > 0) {
+			File randomFile;
+			Random rand = new Random();
+			
 			// ...choose a random file and send it to the "channel"
 			randomFile = paths[rand.nextInt(paths.length)];
 			sendFile(channel, randomFile);
@@ -114,9 +114,6 @@ class BotUtils {
 		else {
 			sendMessage(channel, "Please use a valid keyword.");
 		}
-		
-		System.out.println("argsList:" + fullListArgs);
-		System.out.println("keywordToPath:" + keywordToPath);
 	}
 	
 	// Add user as a Bot Admin to use dev commands
@@ -147,12 +144,11 @@ class BotUtils {
 	static void addFolder(IChannel channel, String userID, ArrayList<String> argsList) {
 		// If the user is a Bot Admin...
 		if (admins.contains(userID)) {
-			String folderName;
-			String folderPath;
-			String concatenatedHashMapEntry;
-			
 			// ...and if there are more than two arguments...
 			if (argsList.size() >= 2) {
+				String folderName;
+				String folderPath;
+				
 				folderName = argsList.get(0);
 				argsList.remove(0); // Remove the folder name from argsList
 				folderPath = String.join(" ", argsList);
@@ -161,6 +157,8 @@ class BotUtils {
 				if (Paths.get(folderPath) != null) {
 					// ...and if there are no duplicate KEYS in keywordToPath...
 					if (!keywordToPath.containsKey(folderName)) {
+						String concatenatedHashMapEntry;
+						
 						// ...add the folderName and folderPath to keywordToPath and write to file
 						keywordToPath.put(folderName, folderPath);
 						concatenatedHashMapEntry = folderName + " " + folderPath;

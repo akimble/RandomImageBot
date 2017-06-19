@@ -1,5 +1,5 @@
 # RandomImageBot
-A Discord bot that uses the Discord4J unofficial API to listen for commands (in the form of messages /test, /image, etc.) and sends feedback. This can be in the form of sending a message back, uploading images, or uploading files. This bot will mainly focus on uploading one random image (although it can upload any file) from an earlier specified directory when given the /pic [KEYWORD] command in the channel.
+A Discord bot coded in Java that uses the Discord4J unofficial API to listen for commands (in the form of messages /test, /random, etc.) and sends feedback. The feedback ranges from sending a message back, uploading images, or uploading files. Bot admins can be added using the bot's token with /admin [TOKEN] to have access to various commands (/sleep and /addFolder). Using /addFolder [KEYWORD] [PATH] a bot admin can add a keyword and folder that the bot will randomly upload images from when given the /pic [KEYWORD] command in the channel.
 
 ### Commands:
 
@@ -31,7 +31,7 @@ A Discord bot that uses the Discord4J unofficial API to listen for commands (in 
     
   - Bot Admins can peruse and upload unprotected files from the hosts PC. Be wary of who you add to this role (ideally only the host should be a Bot Admin).
   
-  - Before creating a JAR file of the project, change the path names in readFile, readHashMapFile, and writeToFile in BotUtils to ".\\" (the current path is just for easier testing in Eclipse).
+  - Before creating a JAR file of the project, change the path names in readFile, readHashMapFile, and writeToFile in BotUtils to `".\\"` (the current path is just for easier testing in Eclipse).
     Also create text files for admins.txt and keywordToPath.txt and place them IN the same folder as the JAR file (wherever you put it). Also make sure the folder they are in allows
     you to write into it because the JAR file needs to create a modules folder due to Maven (it's not used but will throw an error if it can't create it). After that, you can just "cd" into
     the folder in CMD and type "java -jar yourJar.jar yourBotToken" to run the RandomImageBot program.
